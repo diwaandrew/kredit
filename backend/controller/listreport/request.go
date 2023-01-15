@@ -9,4 +9,9 @@ type GetSearchRequest struct {
 	Company   string `json:"company"`
 	StartDate string `json:"startdate"`
 	EndDate   string `json:"enddate"`
+	StatusTrx string `json:"statustrx"`
+}
+
+type GetNasabah struct {
+	StatusTrx string `json:"statustrx"`
 }

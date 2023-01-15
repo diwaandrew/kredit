@@ -1,0 +1,46 @@
+.log-shadow {
+    max-width: 550px;
+    min-width: 200px;
+    max-height: 800px;
+    min-height: 300px;   
+    box-shadow: 0px 25px 40px #00000033;
+    /* background-image: url(../../assets/BankSinarmas.png); */
+}
+.login-container{
+    margin-top:100px;
+}
+.input-group{
+    padding:0 !important; 
+}
+.img-shadow {
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+    box-shadow: 0px 25px 40px #00000033;
+    border-radius: 30px;
+    
+}
+
+.btn-shadow{
+    height: 40px !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
+.btn-login{
+    height: 40px;
+    width: 30% !important;
+    padding: 0;
+    
+}
+.btn-shadow:hover {
+    box-shadow: 0 8px 10px 0 rgba(0,0,0,0.1), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.text-shadow {
+    /* text-shadow: 2px 2px; */
+    color: black;
+    text-shadow:  0px 25px 40px #00000033;
+}
+
+.a-regist {
+    text-decoration: none;
+    color: white;
+}

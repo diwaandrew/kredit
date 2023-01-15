@@ -16,7 +16,7 @@ import {
 import * as FaIcons from "react-icons/fa";
 
 
-export default class Checklist extends Component {
+export default class Drawdown extends Component {
     constructor(props){
         super(props)
         this.state = { customers:[], checked:[], branch:[], company:[],
@@ -26,7 +26,7 @@ export default class Checklist extends Component {
 
     componentDidMount(){
         axios
-            .get(API_URL+"/listreport")
+            .get(API_URL+"/listreport?statustrx=0")
             .then(res => {
                 const customers = res.data.data;
                 this.setState({customers});
@@ -115,7 +115,7 @@ export default class Checklist extends Component {
         }else{
             this.setState({isSubmit:true})
             axios
-                .get(API_URL+"/search?branch="+formData.get('branch')+"&company="+formData.get('company')+"&startdate="+formData.get('startDate')+"&enddate="+formData.get('endDate'))
+                .get(API_URL+"/search?branch="+formData.get('branch')+"&company="+formData.get('company')+"&startdate="+formData.get('startDate')+"&enddate="+formData.get('endDate')+"&statustrx=0")
                 .then((res) => {
                     const customers = res.data.data;
                     this.setState({ customers });
@@ -161,11 +161,6 @@ export default class Checklist extends Component {
                 </tr>
             )
         )
-
-        function PaginatedItems(){
-
-        }
-
         return (
             <Container fluid>
                 <Form onSubmit={(e)=>this.handleSubmit(e)}>  

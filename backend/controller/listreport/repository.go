@@ -9,10 +9,10 @@ import (
 )
 
 type ListRepository interface {
-	GetListReport() ([]response, error)
+	GetListReport(statustrx string) ([]response, error)
 	GetBranch() ([]model.Branch_Tabs, error)
 	GetCompany() ([]model.Mst_Company_Tabs, error)
-	SearchListReport(branch string, company string, startDate string, endDate string) ([]response, error)
+	SearchListReport(branch string, company string, startDate string, endDate string, statustrx string) ([]response, error)
 	UpdateCustomer(req []requestbody) error
 }
 
@@ -50,7 +50,7 @@ func (r *repository) UpdateCustomer(req []requestbody) error {
 	return nil
 }
 
-func (r *repository) GetListReport() ([]response, error) {
+func (r *repository) GetListReport(statustrx string) ([]response, error) {
 
 	res, err := r.db.Raw(`SELECT cdt.ppk, cdt.name, ldt.otr, ldt.loan_amount, cdt.drawdown_date, ldt.loan_period, 
 	ldt.interest_effective, ldt.monthly_payment, vdt.collateral_id,ldt.branch,cdt.channeling_company 
@@ -58,8 +58,8 @@ func (r *repository) GetListReport() ([]response, error) {
 	LEFT JOIN Loan_Data_Tab ldt 
 	ON cdt.custcode = ldt.custcode 
 	LEFT JOIN vehicle_data_tab vdt 
-	ON cdt.custcode = vdt.custcode 
-	WHERE cdt.approval_status='9' `).Rows()
+	ON cdt.custcode = vdt.custcode
+	WHERE cdt.approval_status = $1`, statustrx).Rows()
 	listData := []response{}
 	if err != nil {
 		panic(err)
@@ -121,7 +121,7 @@ func (r *repository) GetCompany() ([]model.Mst_Company_Tabs, error) {
 	return Company, nil
 }
 
-func (r *repository) SearchListReport(branch string, company string, startDate string, endDate string) ([]response, error) {
+func (r *repository) SearchListReport(branch string, company string, startDate string, endDate string, statustrx string) ([]response, error) {
 	query1 := ""
 	query2 := ""
 	if branch == "" {
@@ -145,8 +145,8 @@ func (r *repository) SearchListReport(branch string, company string, startDate s
 	ON cdt.custcode = ldt.custcode 
 	LEFT JOIN vehicle_data_tab vdt 
 	ON cdt.custcode = vdt.custcode 
-	WHERE cdt.approval_status='9' 
-	AND drawdown_date between $3 and $4 `+query1+query2, branch, company, startDate, endDate).Rows()
+	WHERE cdt.approval_status = $5 
+	AND drawdown_date between $3 and $4 `+query1+query2, branch, company, startDate, endDate, statustrx).Rows()
 	listData := []response{}
 	if err != nil {
 		panic(err)

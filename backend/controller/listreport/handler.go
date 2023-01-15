@@ -16,7 +16,9 @@ func NewHandler(service Service) *Handler {
 }
 
 func (h *Handler) GetListReport(c *gin.Context) {
-	listReport, status, err := h.Service.GetListReport()
+	statustrx := c.Query("statustrx")
+	req := GetNasabah{StatusTrx: statustrx}
+	listReport, status, err := h.Service.GetListReport(req)
 	if err != nil {
 		log.Println("Error handler Get : ", err)
 		c.JSON(status, gin.H{
@@ -65,7 +67,8 @@ func (h *Handler) SearchListReport(c *gin.Context) {
 	company := c.Query("company")
 	startdate := c.Query("startdate")
 	enddate := c.Query("enddate")
-	req := GetSearchRequest{Branch: branch, Company: company, StartDate: startdate, EndDate: enddate}
+	statustrx := c.Query("statustrx")
+	req := GetSearchRequest{Branch: branch, Company: company, StartDate: startdate, EndDate: enddate, StatusTrx: statustrx}
 	listReport, status, err := h.Service.SearchListReport(req)
 	if err != nil {
 		log.Println("Error handler Get : ", err)

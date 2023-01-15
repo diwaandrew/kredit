@@ -8,7 +8,7 @@ import (
 )
 
 type Service interface {
-	GetListReport() ([]response, int, error)
+	GetListReport(data GetNasabah) ([]response, int, error)
 	GetBranch() ([]model.Branch_Tabs, int, error)
 	GetCompany() ([]model.Mst_Company_Tabs, int, error)
 	SearchListReport(data GetSearchRequest) ([]response, int, error)
@@ -22,8 +22,8 @@ func NewService(repo ListRepository) *service {
 	return &service{repo}
 }
 
-func (s *service) GetListReport() ([]response, int, error) {
-	listReport, err := s.repo.GetListReport()
+func (s *service) GetListReport(data GetNasabah) ([]response, int, error) {
+	listReport, err := s.repo.GetListReport(data.StatusTrx)
 	if err != nil {
 		log.Println("Internal server error : ", err)
 		return nil, http.StatusInternalServerError, err
@@ -61,7 +61,7 @@ func (s *service) UpdateCustomer(req []requestbody) (int, error) {
 }
 
 func (s *service) SearchListReport(data GetSearchRequest) ([]response, int, error) {
-	listReport, err := s.repo.SearchListReport(data.Branch, data.Company, data.StartDate, data.EndDate)
+	listReport, err := s.repo.SearchListReport(data.Branch, data.Company, data.StartDate, data.EndDate, data.StatusTrx)
 	if err != nil {
 		log.Println("Internal server error : ", err)
 		return nil, http.StatusInternalServerError, err
