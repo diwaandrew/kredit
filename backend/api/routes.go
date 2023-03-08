@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/diwaandrew/kredit/controller/auth"
 	"github.com/diwaandrew/kredit/controller/listreport"
+	"github.com/diwaandrew/kredit/controller/login"
 	"github.com/diwaandrew/kredit/controller/skalaangsuran"
 	"github.com/gin-contrib/cors"
 )
@@ -13,6 +14,12 @@ func (s *server) SetupRouter() {
 		AllowMethods: []string{"POST", "GET", "DELETE", "PUT"},
 		AllowHeaders: []string{"*"},
 	}))
+
+	loginRepo := login.NewRepository(s.DB)
+	loginService := login.NewService(loginRepo)
+	loginHandler := login.NewHandler(loginService)
+	s.Router.GET("/login", loginHandler.GetLogin)
+	s.Router.PUT("/updatePassword", loginHandler.UpdatePassword)
 
 	authRepo := auth.NewRepository(s.DB)
 	authService := auth.NewService(authRepo)

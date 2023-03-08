@@ -52,14 +52,11 @@ func (r *repository) UpdateCustomer(req []requestbody) error {
 
 func (r *repository) GetListReport(statustrx string) ([]response, error) {
 
-	res, err := r.db.Raw(`SELECT cdt.ppk, cdt.name, ldt.otr, ldt.loan_amount, cdt.drawdown_date, ldt.loan_period, 
-	ldt.interest_effective, ldt.monthly_payment, vdt.collateral_id,ldt.branch,cdt.channeling_company 
-	FROM customer_data_tab cdt 
-	LEFT JOIN Loan_Data_Tab ldt 
-	ON cdt.custcode = ldt.custcode 
-	LEFT JOIN vehicle_data_tab vdt 
-	ON cdt.custcode = vdt.custcode
-	WHERE cdt.approval_status = $1`, statustrx).Rows()
+	// r.db.raw("select * from view_dradown where approval_status=@approval", map[string]interface{"approval":"9"}).find(&data)
+
+	res, err := r.db.Raw(`SELECT ppk,name,otr,loan_amount,drawdown_date,Loan_period,interest_effective,monthly_payment,collateral_id,Branch,channeling_company 
+	FROM view_drawdown 
+	WHERE approval_status = $1`, statustrx).Rows()
 	listData := []response{}
 	if err != nil {
 		panic(err)
