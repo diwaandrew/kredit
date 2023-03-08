@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
+import DataTable from 'react-data-table-component'
 import axios from 'axios'
 import swal from 'sweetalert'
 import { API_URL } from '../../const'
-import {
-    Table, 
+import { 
     Button, 
     FormGroup, 
     FormSelect, 
@@ -14,12 +14,14 @@ import {
     Row
 } from 'react-bootstrap';
 import * as FaIcons from "react-icons/fa";
+import Moment from 'moment';
+import { FormatRupiah } from "@arismun/format-rupiah";
 
 
 export default class Checklist extends Component {
     constructor(props){
         super(props)
-        this.state = { customers:[], checked:[], branch:[], company:[],
+        this.state = { customers:[], checked:[], branch:[], company:[],data:[],
             currentDate:new Date().toISOString().split('T')[0], isSubmit:false
         };
     }
@@ -126,8 +128,6 @@ export default class Checklist extends Component {
                 });
         }
     }
-    
-
     render() {
         let branchList = this.state.branch.map(
             (branchList)=>(
@@ -144,26 +144,66 @@ export default class Checklist extends Component {
                 </option>
             )
         )
-
-        let customerList = this.state.customers.map(
+        let data = []
+        this.state.customers.map(
             (customerList,id)=>(
-                <tr>
-                    <td>{id+1}</td>
-                    <td>{customerList.Ppk}</td>
-                    <td>{customerList.Name}</td>
-                    <td>{customerList.Company}</td>
-                    <td>{customerList.DrawdownDate}</td>
-                    <td>{customerList.Loan_Amount}</td>
-                    <td>{customerList.InterestEffective}%</td>
-                    <td className='text-center'>
-                        <input type={"checkbox"} onChange={(e) => this.checklist(customerList.Ppk,e)}></input>
-                    </td>
-                </tr>
+                data = [...data,{
+                    id:id+1, 
+                    Ppk:customerList.Ppk, 
+                    Name:customerList.Name,
+                    Company:customerList.Company,
+                    DrawdownDate:Moment(customerList.DrawdownDate).format('LLL'),
+                    Loan_Amount:<FormatRupiah value={customerList.Loan_Amount}/>,
+                    InterestEffective:customerList.InterestEffective,
+                    action:<input className='text-center' type={"checkbox"} onChange={(e) => this.checklist(customerList.Ppk,e)}></input>
+                }]
             )
         )
+        const kolom = [
+            {
+                name : "No",
+                selector: row => row.id, 
+                sortable: true, 
+                width: '70px', 
+            },
+            {
+                name : "PPK",
+                selector: row => row.Ppk,   
+            },
+            {
+                name : "Name",
+                selector: row => row.Name, 
+                sortable: true,  
+            },
+            {
+                name : "Company",
+                selector: row => row.Company,   
+            },
+            {
+                name : "Drawdown Date",
+                selector: row => row.DrawdownDate,  
+            },
+            {
+                name : "Loan Amount",
+                selector: row => row.Loan_Amount,   
+                sortable: true,
+            },
+            {
+                name : "Interest Effective",
+                selector: row => row.InterestEffective,
+                sortable: true,   
+            },
+            {
+                name : "Action",
+                selector: row => row.action,
+                center : true,   
+            },
+        ]
+    
         return (
             <Container fluid>
                 <Form onSubmit={(e)=>this.handleSubmit(e)}>  
+                    <Row ><h2 className='d-flex justify-content-center align-items-center pb-4'>Checklist Report</h2> </Row>
                     <Row className='d-flex justify-content-center align-items-center pb-4'>
                         <Col xs="auto">
                             <Row xs="auto">
@@ -227,36 +267,19 @@ export default class Checklist extends Component {
                             </Button>
                         </Col>
                     </Row>
+                    <Row></Row>
                     <Row>
-                       
-                    </Row>
-                    <Row>
-                        <Table striped bordered hover size="sm">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Ppk</th>
-                                    <th>Name</th>
-                                    <th>Channeling Company</th>
-                                    <th>Drawdown Date</th>
-                                    <th>Loan Amount</th>
-                                    <th>Interest Eff</th>
-                                    <th className='text-center'>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                this.state.customers.length === 0 && this.state.isSubmit===true ?
-                                <tr className='table'>
-                                    <td colSpan={8} className='text-center'>
-                                        Tidak Ada Data
-                                    </td> 
-                                </tr> 
-                                : 
-                                customerList
-                            }
-                            </tbody>
-                        </Table>
+                        <DataTable 
+                            // title='Approval'
+                            columns={kolom}
+                            data={data}
+                            direction="auto"
+                            fixedHeaderScrollHeight="300px"
+                            pagination
+                            responsive
+                            subHeaderAlign="right"
+                            subHeaderWrap
+                        />
                     </Row>
                     <Row>
                         <Col xs="auto">

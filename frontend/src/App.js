@@ -5,9 +5,10 @@ import Login from './page/login/Login';
 import Sidebars from './components/menu/Sidebars';
 import Checklist from './components/customertab/Checklist';
 import Drawdown from './components/customertab/Drawdown'
+import ChangePassword from './components/changepassword/ChangePassword'
 
 function App() {
-  if (localStorage.getItem("name")==="john"){
+  if (localStorage.getItem("login")==="true"){
     return (
       <BrowserRouter>
         <div className='d-flex'>
@@ -19,6 +20,7 @@ function App() {
               <Route path="/" element={<Home />} exact />
               <Route path="/approval" element={<Checklist />} exact />
               <Route path="/drawdown" element={<Drawdown />} exact />
+              <Route path="/changepassword" element={<ChangePassword />} exact />
             </Routes>
           </div>
         </div>

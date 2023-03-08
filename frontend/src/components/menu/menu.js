@@ -18,5 +18,11 @@ export const Menu = [
         path: '/drawdown',
         icon: <FcIcons.FcDocument />,
         cName: 'nav-text'
+    },
+    {
+        title: 'Change Password',
+        path: '/changepassword',
+        icon: <FcIcons.FcUnlock />,
+        cName: 'nav-text'
     }
 ]
