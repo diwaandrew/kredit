@@ -60,12 +60,12 @@ export default class Login extends Component {
 	};
     render() {
         return (
-            <div className='login-body'>
+            <div>
                 <Container fluid className='login-container mb-3'>
                     <Row className='d-flex justify-content-center align-items-center'>
                         <Col col='12' >
                             <div className='mx-auto log-shadow p-5' >
-                                <Image src={BankSinarmas} width="300" height="200" className='text-center'/>
+                                    <Image src={BankSinarmas} width="330px" height="300px"/>
                                 <Card.Body className='w-100 d-flex flex-column'>
                                     <Row>
                                     <InputGroup  className="btn-shadow mb-2" onChange={this.handleUsername} value={this.state.username} >
